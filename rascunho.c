@@ -310,29 +310,35 @@ Carta acaoDescarta(Jogador *bot, int indice, char *auxNaipe){
     return c;
 }
 
-void inicializaBaralho(Carta totalDeCartas[56]){
+void inicializaBaralho(Carta totalDeCartas[108]){
   char* naipes[4] = {"♥", "♦", "♣", "♠"}; //tentar transformar isso numa constante?? (usada 2x no codigo)
   char* valor[13] = {"A", "2", "3", "4","5","6","7","8","9","10","V","D","R"}; 
 
-  int k = 0;
-
-  for(int i = 0; i < 14; i++){
-      if(k < 52){
+  int k = 0,q = 0;
+  
+  
+    for(int i = 0; i < 14; i++){
+        if(k < 104){
           for(int j=0; j < 4; j++){
-          totalDeCartas[k].valorCarta = valor[i];
-          totalDeCartas[k].valorNaipe = naipes[j];
-          k++;
+            for(q = 0; q < 2; q++){
+              totalDeCartas[k].valorCarta = valor[i];
+              totalDeCartas[k].valorNaipe = naipes[j];
+              k++;
+            }
+          }
+        }
+        if(k > 103 && k < 108){
+          for(int j=0; j <= 2; j++){
+            for(q = 0; q < 2; q++){
+              totalDeCartas[k].valorCarta = "C";
+              totalDeCartas[k].valorNaipe = naipes[j];
+              k++;
+            }
+            j++;
+          }
         }
       }
-      if(k > 51){
-        for(int j=0; j <= 2; j++){
-          totalDeCartas[k].valorCarta = "C";
-          totalDeCartas[k].valorNaipe = naipes[j];
-          k++;
-          j = j+2;
-        }
-      }
-    }
+    
 }
 
 void desalocaCarta(Carta *c){
@@ -357,7 +363,7 @@ void acaoCompra(int qtdCartas, Jogador *bot){
 
 int main() {
 
-    Carta totalDeCartas[56];
+    Carta totalDeCartas[108];//eram 54 cm 1 baralho só
     Carta pilhaSobMesa[115];
     int contador = 0, especial = 0;
 
@@ -379,7 +385,7 @@ int main() {
     setbuf(stderr, NULL);
     srand(time(NULL));
 
-   // inicializaBaralho(totalDeCartas);
+   inicializaBaralho(totalDeCartas);
       
     // Ler quais são os jogadores
     scanf("PLAYERS %[^\n]\n", temp);
