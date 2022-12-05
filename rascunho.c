@@ -22,7 +22,7 @@ typedef struct {     // struct feita para representar uma unica carta
 
 typedef struct  {   // struct para guardar as cartas dos jogadores 
     Carta *cartasDoJogador;
-    int qtdDeCartas;//Verify se é usado
+    int qtdDeCartas;
 }Mao;
 
 typedef struct {   // representa um jogador 
@@ -32,27 +32,6 @@ typedef struct {   // representa um jogador
 
 void debug(char *message) {
     fprintf(stderr, "%s ", message);
-}
-
-Jogador* armazenaJogadores(char *mensagem){   // crial um array onde cada elemento é um jogador  
-    int aux = 0, tamanho;                     
-    char *pedaco;
-    Jogador *array;
-
-    pedaco = strtok(mensagem," ");
-    while (pedaco != NULL) {
-        if (aux == 0){
-            array = malloc(sizeof(Jogador));
-            strcpy(array[aux].id, pedaco);
-            aux += 1;
-        }else{
-            array = realloc(array, sizeof(Jogador) * (aux+1));
-            strcpy(array[aux].id, pedaco);
-            aux += 1;
-        }
-        pedaco = strtok(NULL," ");
-    }
-    return array;
 }
 
 Carta gerarCarta(char *mensagem){     // transforma uma string com valor e nipe em uma variavel do tipo Carta
@@ -208,7 +187,6 @@ char *naipeFrequente(Jogador *bot){ //escolhe naipe que aparece com maior freque
   return listaNaipes[maiorIndice];
 }
 
-
 void retiraCarta(Jogador *bot, int indice){ //função que retira carta da mão quando essa é jogada (atualiza mão)
   Carta *aux;
   int count = 0;
@@ -229,7 +207,6 @@ void retiraCarta(Jogador *bot, int indice){ //função que retira carta da mão 
   bot->maoDoJogador.cartasDoJogador = aux;
    
 } 
-
 
 void adicionaCarta(Jogador *bot, Carta c){
   int qtdAtual = bot->maoDoJogador.qtdDeCartas;
@@ -286,7 +263,6 @@ void recebeCartas(int qtdCartas, Jogador *bot){
         c = gerarCarta(cartas[i]);
         adicionaCarta(bot, c);
     }
-
 }
 
 Carta acaoDescarta(Jogador *bot, int indice, char *auxNaipe){
@@ -336,7 +312,6 @@ void inicializaBaralho(Carta totalDeCartas[108]){
           }
         }
       }
-    
 }
 
 void desalocaCarta(Carta *c){
@@ -358,7 +333,6 @@ void acaoCompra(int qtdCartas, Jogador *bot,Carta totalDeCartas[108]){
     acompanhaTotal(totalDeCartas, c);
     adicionaCarta(bot, c);
   }
-
 }
 
 int main() {
@@ -370,7 +344,7 @@ int main() {
     char temp[MAX_LINE];  
     char my_id[MAX_ID_SIZE]; 
 
-    Jogador *jogadores;
+    Jogador botT;
     Mao minhaMao;
 
     char complemento2[MAX_LINE];
@@ -386,16 +360,15 @@ int main() {
     // Ler quais são os jogadores
     scanf("PLAYERS %[^\n]\n", temp);
 
-    jogadores = armazenaJogadores(temp);
-
     // Id do nosso bot
     scanf("YOU %s\n", my_id);
+    strcpy(botT.id,my_id);
 
     // A mão recebida
     scanf("HAND %[^\n]\n", temp);
     minhaMao = maoInicial(temp,totalDeCartas); 
-    jogadores[1].maoDoJogador = minhaMao;
-
+    botT.maoDoJogador = minhaMao;
+  
     // carta inicial 
     scanf("TABLE %s\n", temp);
     pilhaSobMesa[contador++] = gerarCarta(temp);
@@ -448,29 +421,27 @@ int main() {
  
     recebida = inicializaCarta(pilhaSobMesa[contador-1].valorCarta, pilhaSobMesa[contador-1].valorNaipe); //inicializa carta recebida
 
-    cartasCompradas = compraCartas(recebida, auxNaipe, &especial, &jogadores[1]); //verifica se o jogador terá que comprar cartas e retorna a qtd
+    cartasCompradas = compraCartas(recebida, auxNaipe, &especial, &botT); //verifica se o jogador terá que comprar cartas e retorna a qtd
 
     strcpy(recebida.valorNaipe, auxNaipe); //atualizaNaipe de carta recebida;
 
     if(!cartasCompradas){
-        int indice = selecionaCarta(recebida, &jogadores[1]);  //recebe carta que vai jogar
+        int indice = selecionaCarta(recebida, &botT);  //recebe carta que vai jogar
 
-        pilhaSobMesa[contador++] = acaoDescarta(&jogadores[1], indice, auxNaipe); //envia açao ao gerenciador, atualiza naipe e mao do jogador
+        pilhaSobMesa[contador++] = acaoDescarta(&botT, indice, auxNaipe); //envia açao ao gerenciador, atualiza naipe e mao do jogador
         atualizaEspecial(pilhaSobMesa[contador-1], &especial); //atualiza o status de especial quando bot joga
     }else{
         retornaFrase();
-        acaoCompra(cartasCompradas, &jogadores[1],totalDeCartas); //compra cartas e atualiza mao do jogador
+        acaoCompra(cartasCompradas, &botT,totalDeCartas); //compra cartas e atualiza mao do jogador
     }
 
   }
 
-  
   for(int i=0; i<contador; i++){
     desalocaCarta(&pilhaSobMesa[i]);
   }
 
   free(minhaMao.cartasDoJogador);
-  free(jogadores);
 
     return 0;
 }
