@@ -22,7 +22,7 @@ typedef struct {     // struct feita para representar uma unica carta
 
 typedef struct  {   // struct para guardar as cartas dos jogadores 
     Carta *cartasDoJogador;
-    int qtdDeCartas;
+    int qtdDeCartas;//Verify se é usado
 }Mao;
 
 typedef struct {   // representa um jogador 
@@ -182,13 +182,6 @@ int verificaValor(char *valorCarta, Mao maoJogador, int *indice){
   }
   return 0;
 }
-
-/*int comparaCartas(Carta c1, Carta c2){
-  if((strcmp(c1.valorCarta, c2.valorCarta) == 0) && (strcmp(c1.valorNaipe, c2.valorNaipe) == 0)){
-    return 1;
-  }
-  return 0;
-}*/
 
 char *naipeFrequente(Jogador *bot){ //escolhe naipe que aparece com maior frequencia na mao
   char *listaNaipes[] = {"♥","♦","♣","♠"};
@@ -379,10 +372,6 @@ int main() {
 
     Jogador *jogadores;
     Mao minhaMao;
-  
-   // Carta ultimoEspecial; //salva ultimo valete jogado
-
-    //ultimoEspecial = inicializaCarta(" ", "♥"); 
 
     char complemento2[MAX_LINE];
     char auxNaipe[MAX_LINE]; //guarda o naipe atual da partida
@@ -397,9 +386,7 @@ int main() {
     // Ler quais são os jogadores
     scanf("PLAYERS %[^\n]\n", temp);
 
-    //debug(temp);
     jogadores = armazenaJogadores(temp);
-  
 
     // Id do nosso bot
     scanf("YOU %s\n", my_id);
@@ -416,9 +403,6 @@ int main() {
     auxNaipe[strlen(auxNaipe)] = '\0';
     atualizaEspecial(pilhaSobMesa[contador-1], &especial);
   
-    //Acompanha total de cartas tirei pois nao faz parte dos baralhos
-    //acompanhaTotal(totalDeCartas, pilhaSobMesa[contador-1]);
-     
     char id[MAX_ID_SIZE];
     char acao[MAX_ACTION];
     char complemento[MAX_LINE];
