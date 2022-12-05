@@ -83,21 +83,24 @@ Carta gerarCarta(char *mensagem){     // transforma uma string com valor e nipe 
     return saida;
 }
 
-/*void acompanhaTotal(Carta totalDeCartas[56], Carta pedaco[MAX_LINE]){
-  //debug(pedaco->valorCarta[0]);
-  //debug(pedaco->valorNaipe);
-  int i;
-  for(i=0;i < 54; i++){
-    debug("entrou1");
-    if(strstr(pedaco, totalDeCartas[i])){
-      totalDeCartas[i].valorCarta = "";
-      totalDeCartas[i].valorNaipe = "";
-      debug("entrou");
+void acompanhaTotal(Carta totalDeCartas[108], Carta pedaco){
+  int i = 0,j=0;
+  for(i=0;i < 108; i++){
+    if(strcmp(pedaco.valorCarta, totalDeCartas[i].valorCarta) == 0 && strcmp(pedaco.valorNaipe, totalDeCartas[i].valorNaipe) == 0){
+      for(j = i; j < 107; j++){
+        totalDeCartas[j].valorCarta = totalDeCartas[j+1].valorCarta;
+        totalDeCartas[j].valorNaipe = totalDeCartas[j+1].valorNaipe;
+      }
+      if(j == 107){
+        totalDeCartas[j].valorCarta = "";
+        totalDeCartas[j].valorNaipe = "";
+      }
+      break;
     }
   }
-}*/
+}
 
-Mao maoInicial(char *mensagem){     // Faz a leitura das cartas iniciais do bot
+Mao maoInicial(char *mensagem, Carta totalDeCartas[108]){     // Faz a leitura das cartas iniciais do bot
     Mao saida;
     Carta aux;
     char *pedaco, vetor[10][10];
@@ -115,6 +118,8 @@ Mao maoInicial(char *mensagem){     // Faz a leitura das cartas iniciais do bot
     for (int i = 1; i < cont - 1; i++) {
         tamanho = strlen(vetor[i]);
         aux = gerarCarta(vetor[i]);
+        //Retira do cartaTotais o 1º baralho do nosso bot
+        acompanhaTotal(totalDeCartas, aux);
         saida.cartasDoJogador[i-1].valorCarta = malloc(sizeof(char) * 3);
         saida.cartasDoJogador[i-1].valorNaipe = malloc(sizeof(char) * 4);
         strcpy(saida.cartasDoJogador[i-1].valorCarta, aux.valorCarta);
@@ -310,29 +315,35 @@ Carta acaoDescarta(Jogador *bot, int indice, char *auxNaipe){
     return c;
 }
 
-void inicializaBaralho(Carta totalDeCartas[56]){
-  char* naipes[4] = {"♥", "♦", "♣", "♠"}; //tentar transformar isso numa constante?? (usada 2x no codigo)
+void inicializaBaralho(Carta totalDeCartas[108]){
+  char* naipes[4] = {"♥", "♦", "♣", "♠"}; 
   char* valor[13] = {"A", "2", "3", "4","5","6","7","8","9","10","V","D","R"}; 
 
-  int k = 0;
-
-  for(int i = 0; i < 14; i++){
-      if(k < 52){
+  int k = 0,q = 0;
+  
+  
+    for(int i = 0; i < 14; i++){
+        if(k < 104){
           for(int j=0; j < 4; j++){
-          totalDeCartas[k].valorCarta = valor[i];
-          totalDeCartas[k].valorNaipe = naipes[j];
-          k++;
+            for(q = 0; q < 2; q++){
+              totalDeCartas[k].valorCarta = valor[i];
+              totalDeCartas[k].valorNaipe = naipes[j];
+              k++;
+            }
+          }
+        }
+        if(k > 103 && k < 108){
+          for(int j=0; j <= 2; j++){
+            for(q = 0; q < 2; q++){
+              totalDeCartas[k].valorCarta = "C";
+              totalDeCartas[k].valorNaipe = naipes[j];
+              k++;
+            }
+            j++;
+          }
         }
       }
-      if(k > 51){
-        for(int j=0; j <= 2; j++){
-          totalDeCartas[k].valorCarta = "C";
-          totalDeCartas[k].valorNaipe = naipes[j];
-          k++;
-          j = j+2;
-        }
-      }
-    }
+    
 }
 
 void desalocaCarta(Carta *c){
@@ -341,7 +352,7 @@ void desalocaCarta(Carta *c){
 }
 
 
-void acaoCompra(int qtdCartas, Jogador *bot){
+void acaoCompra(int qtdCartas, Jogador *bot,Carta totalDeCartas[108]){
   char cartas[qtdCartas][MAX_LINE];
   Carta c;
 
@@ -350,6 +361,8 @@ void acaoCompra(int qtdCartas, Jogador *bot){
   for(int i=0; i<qtdCartas; i++){ //recebe cartas do gerenciador e add na mao
     scanf(" %s\n", cartas[i]);
     c = gerarCarta(cartas[i]);
+    //Acompanha total de cartas
+    acompanhaTotal(totalDeCartas, c);
     adicionaCarta(bot, c);
   }
 
@@ -357,7 +370,7 @@ void acaoCompra(int qtdCartas, Jogador *bot){
 
 int main() {
 
-    Carta totalDeCartas[56];
+    Carta totalDeCartas[108];//eram 54 cm 1 baralho só
     Carta pilhaSobMesa[115];
     int contador = 0, especial = 0;
 
@@ -379,7 +392,7 @@ int main() {
     setbuf(stderr, NULL);
     srand(time(NULL));
 
-   // inicializaBaralho(totalDeCartas);
+   inicializaBaralho(totalDeCartas);
       
     // Ler quais são os jogadores
     scanf("PLAYERS %[^\n]\n", temp);
@@ -393,7 +406,7 @@ int main() {
 
     // A mão recebida
     scanf("HAND %[^\n]\n", temp);
-    minhaMao = maoInicial(temp); 
+    minhaMao = maoInicial(temp,totalDeCartas); 
     jogadores[1].maoDoJogador = minhaMao;
 
     // carta inicial 
@@ -402,6 +415,9 @@ int main() {
     strcpy(auxNaipe, pilhaSobMesa[contador-1].valorNaipe); //atualiza auxNaipe
     auxNaipe[strlen(auxNaipe)] = '\0';
     atualizaEspecial(pilhaSobMesa[contador-1], &especial);
+  
+    //Acompanha total de cartas tirei pois nao faz parte dos baralhos
+    //acompanhaTotal(totalDeCartas, pilhaSobMesa[contador-1]);
      
     char id[MAX_ID_SIZE];
     char acao[MAX_ACTION];
@@ -421,11 +437,10 @@ int main() {
         if(strcmp(acao, "DISCARD") == 0){
           pilhaSobMesa[contador++] = gerarCarta(complemento);
           strcpy(auxNaipe, pilhaSobMesa[contador-1].valorNaipe);
+          //Retira a carta descartada do total de cartas
+          acompanhaTotal(totalDeCartas, pilhaSobMesa[contador-1]);
 
-          if(strstr(pilhaSobMesa[contador-1].valorCarta,"A")!= NULL){
-            scanf(" %s", complemento2);
-            strcpy(auxNaipe, complemento2);
-          }else if(strstr(pilhaSobMesa[contador-1].valorCarta,"C")!= NULL){
+          if(strstr(pilhaSobMesa[contador-1].valorCarta,"A")!= NULL || strstr(pilhaSobMesa[contador-1].valorCarta,"C")!= NULL){
             scanf(" %s", complemento2);
             strcpy(auxNaipe, complemento2);
           }
@@ -460,11 +475,12 @@ int main() {
         atualizaEspecial(pilhaSobMesa[contador-1], &especial); //atualiza o status de especial quando bot joga
     }else{
         retornaFrase();
-        acaoCompra(cartasCompradas, &jogadores[1]); //compra cartas e atualiza mao do jogador
+        acaoCompra(cartasCompradas, &jogadores[1],totalDeCartas); //compra cartas e atualiza mao do jogador
     }
 
   }
 
+  
   for(int i=0; i<contador; i++){
     desalocaCarta(&pilhaSobMesa[i]);
   }
