@@ -1,1 +1,1 @@
-void debug(char );
+void debug(char* );
