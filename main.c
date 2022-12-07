@@ -32,7 +32,7 @@ void retornaFrase(){
 
 int verificaNaipe(char *valorNaipe, Mao maoJogador, int *indice){
   for(int i=0; i<maoJogador.qtdDeCartas; i++){
-    if(strcmp(maoJogador.cartasDoJogador[i].valorNaipe, valorNaipe)==0){
+    if(strcmp(maoJogador.cartasDoJogador[i].valorNaipe, valorNaipe)==0 && strcmp(maoJogador.cartasDoJogador[i].valorCarta, "A")!=0){ //guarda As
       if(indice!=NULL){
         *indice = i;
       }
@@ -54,7 +54,7 @@ int verificaValor(char *valorCarta, Mao maoJogador, int *indice){
   return 0;
 }
 
-int verificaEspecial(char *valorCarta, Mao maoJogador, int *indice){ //exceto As
+/*int verificaEspecial(char *valorCarta, Mao maoJogador, int *indice){ //exceto As
   if(verificaValor("C", maoJogador, indice)){
     return 1;
   }else if(strcmp(valorCarta, "V") == 0 && verificaValor("V", maoJogador, indice)){
@@ -65,7 +65,7 @@ int verificaEspecial(char *valorCarta, Mao maoJogador, int *indice){ //exceto As
     return 1;
   }
   return 0;
-}
+}*/
 
 char *naipeFrequente(Jogador *bot){ //escolhe naipe que aparece com maior frequencia na mao
   char *listaNaipes[] = {"♥","♦","♣","♠"};
@@ -117,6 +117,31 @@ char *valorFrequente(Jogador *bot){ //escolhe valor que aparece com maior freque
   return listaValor[maiorIndice];
 }
 
+har *valorRaro(Carta baralho[108]){ //escolhe valor que foi mais jogado
+  char* listaValor[12] = {"2", "3", "4","5","6","7","8","9","10","V","D","R"}; 
+  int qtdValor[12] = {0};
+  int menor, menorIndice = 0;
+   
+   for(int i=0; i<12; i++){
+      for(int j=0; j<108; j++){
+          if(strcmp(listaValor[i], baralho[j].valorCarta)==0){
+            qtdValor[i] += 1;
+          }
+      }
+   }
+
+  menor = qtdValor[0];
+
+  for(int i=0; i<12; i++){
+    if(qtdValor[i] < menor){
+      menor = qtdValor[i];
+      menorIndice = i;
+    }
+  }
+
+  return listaValor[menorIndice];
+}
+
 int selecionaCarta(Carta c, Jogador *bot){ //encontra a carta a ser jogada (AINDA VOU MUDAR VARIAS COISAS)
   int indice = 0; //indice da carta que será jogada
   char naipe[MAX_LINE];
@@ -128,7 +153,14 @@ int selecionaCarta(Carta c, Jogador *bot){ //encontra a carta a ser jogada (AIND
   strcpy(valor, valorFrequente(bot)); //guarda o valor mais frequente da mao
   valor[strlen(valor)] = '\0';
 
-  if(verificaEspecial(c.valorCarta, bot->maoDoJogador, &indice)){ //verifica se pode jogar alguma carta de açao, exceto As
+
+  if(verificaValor("C", bot->maoDoJogador, &indice)){
+    return indice;
+  }else if(strcmp(c.valorCarta, "V") == 0 && verificaValor("V", maoJogador, indice)){
+    return indice;
+  }else if(strcmp(c.valorCarta, "R") == 0 && verificaValor("R", maoJogador, indice)){
+    return indice;
+  }else if(strcmp(c.valorCarta, "D") == 0 && verificaValor("D", maoJogador, indice)){
     return indice;
   }else if(strcmp(c.valorNaipe, naipe) == 0 && verificaNaipe(c.valorNaipe, bot->maoDoJogador, &indice)){
     return indice;
@@ -138,7 +170,7 @@ int selecionaCarta(Carta c, Jogador *bot){ //encontra a carta a ser jogada (AIND
     return indice;
   }else if(verificaValor(c.valorCarta, bot->maoDoJogador, &indice)){ //mais dificil ter valor do que naipe na mao
     return indice;
-  }else if(verificaValor("A", bot->maoDoJogador, &indice)){
+  }else if(verificaValor("A", bot->maoDoJogador, &indice)){ //guarda o As
     return indice;
   } 
 }
@@ -152,7 +184,7 @@ int compraCartas(Carta c, char *naipe, int *especial, Jogador *bot){
     return 2;
   }else if(!verificaNaipe(naipe, bot->maoDoJogador, NULL) &&
            !verificaValor(c.valorCarta, bot->maoDoJogador, NULL) &&
-           !verificaEspecial(c.valorCarta, bot->maoDoJogador, NULL) &&
+           !verificaEspecial("C", bot->maoDoJogador, NULL) &&
            !verificaValor("A", bot->maoDoJogador, NULL)){
     return 1;
   }
