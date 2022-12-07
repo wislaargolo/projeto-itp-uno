@@ -54,6 +54,19 @@ int verificaValor(char *valorCarta, Mao maoJogador, int *indice){
   return 0;
 }
 
+int verificaEspecial(char *valorCarta, Mao maoJogador, int *indice){ //exceto As
+  if(verificaValor("C", maoJogador, indice)){
+    return 1;
+  }else if(strcmp(valorCarta, "V") == 0 && verificaValor("V", maoJogador, indice)){
+    return 1;
+  }else if(strcmp(valorCarta, "R") == 0 && verificaValor("R", maoJogador, indice)){
+    return 1;
+  }else if(strcmp(valorCarta, "D") == 0 && verificaValor("D", maoJogador, indice)){
+    return 1;
+  }
+  return 0;
+}
+
 char *naipeFrequente(Jogador *bot){ //escolhe naipe que aparece com maior frequencia na mao
   char *listaNaipes[] = {"♥","♦","♣","♠"};
   int qtdNaipe[4] = {0};
@@ -85,7 +98,7 @@ int selecionaCarta(Carta c, Jogador *bot){ //encontra a carta a ser jogada (AIND
   strcpy(naipe, naipeFrequente(bot));
   naipe[strlen(naipe)] = '\0';
 
-  if(verificaValor("C", bot->maoDoJogador, &indice)){ 
+  if(verificaEspecial(c.valorCarta, bot->maoDoJogador, &indice)){ //verifica se pode jogar alguma carta de açao, exceto As
     return indice;
   }else if(strcmp(c.valorNaipe, naipe) == 0 && verificaNaipe(c.valorNaipe, bot->maoDoJogador, &indice)){
     return indice;
@@ -106,7 +119,9 @@ int compraCartas(Carta c, char *naipe, int *especial, Jogador *bot){
     (*especial) = 0;
     return 2;
   }else if(!verificaNaipe(naipe, bot->maoDoJogador, NULL) &&
-           !verificaValor(c.valorCarta, bot->maoDoJogador, NULL)){
+           !verificaValor(c.valorCarta, bot->maoDoJogador, NULL) &&
+           !verificaEspecial(c.valorCarta, bot->maoDoJogador, NULL) &&
+           !verificaValor("A", bot->maoDoJogador, NULL)){
     return 1;
   }
   return 0;
