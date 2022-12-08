@@ -1,0 +1,10 @@
+int verificaNaipe(char*, Mao, int*);
+int verificaValor(char*, Mao, int*);
+char *naipeFrequente(Jogador*);
+char *valorFrequente(Jogador*);
+char *valorRaro(Carta*);
+char *naipeRaro(Carta*);
+int frequenciaBaralho(Jogador*, Carta*, Carta, int*);
+int frequenciaMao(Jogador*, Carta, int*);
+int verificaEspecial(Carta, Jogador*, int*);
+int selecionaCarta(Carta, Jogador*, Carta*);
