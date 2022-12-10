@@ -99,10 +99,6 @@ int main() {
     
     int cartasCompradas = 0;
     Carta recebida;
-
-    for(int i=0; i<botT.maoDoJogador.qtdDeCartas; i++){
-      debug(botT.maoDoJogador.cartasDoJogador[i].valorCarta);
-    }
  
     recebida = inicializaCarta(pilhaSobMesa[contador-1].valorCarta, pilhaSobMesa[contador-1].valorNaipe); //inicializa carta recebida
 

@@ -24,22 +24,6 @@ void retornaFrase(){
   }
 }
 
-int compraCartas(Carta c, char *naipe, int *especial, Jogador *bot){
-  if(strcmp(c.valorCarta, "C")==0 && (*especial) == 1){
-    (*especial) = 0;
-    return 4;
-  }else if(strcmp(c.valorCarta, "V")==0 && (*especial) == 1){
-    (*especial) = 0;
-    return 2;
-  }else if(!verificaNaipe(naipe, bot->maoDoJogador, NULL) &&
-           !verificaValor(c.valorCarta, bot->maoDoJogador, NULL) &&
-           !verificaValor("C", bot->maoDoJogador, NULL) &&
-           !verificaValor("A", bot->maoDoJogador, NULL)){
-    return 1;
-  }
-  return 0;
-}
-
 void recebeCartas(int qtdCartas, Jogador *bot){
     char cartas[qtdCartas][MAX_LINE];
     Carta c;

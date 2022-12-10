@@ -195,20 +195,32 @@ int selecionaCarta(Carta c, Jogador *bot, Carta baralho[108]){ //encontra a cart
   if(verificaValor("C", bot->maoDoJogador, &indice)){ 
     return indice;
   }else if(verificaEspecial(c, bot, &indice)){
-    debug("Entou especial");
     return indice;
   }else if(frequenciaBaralho(bot, baralho, c, &indice)){ //verifica se é possível jogar o valor/naipe menos frequentes no baralho
-    debug("Entou baralho");
     return indice; 
   }else if(frequenciaMao(bot, c, &indice)){ //verifica se é possível jogar o  valor/naipe mais frequente da mao do bot
-   debug("Entou baralho");
     return indice;
   }else if(verificaNaipe(c.valorNaipe, bot->maoDoJogador, &indice)){
-    debug("Entou naipe");
     return indice;
   }else if(verificaValor(c.valorCarta, bot->maoDoJogador, &indice)){ //mais dificil ter valor do que naipe na mao
     return indice;
   }else if(verificaValor("A", bot->maoDoJogador, &indice)){ //guarda o As
     return indice;
   } 
+}
+
+int compraCartas(Carta c, char *naipe, int *especial, Jogador *bot){
+  if(strcmp(c.valorCarta, "C")==0 && (*especial) == 1){
+    (*especial) = 0;
+    return 4;
+  }else if(strcmp(c.valorCarta, "V")==0 && (*especial) == 1){
+    (*especial) = 0;
+    return 2;
+  }else if(!verificaNaipe(naipe, bot->maoDoJogador, NULL) &&
+           !verificaValor(c.valorCarta, bot->maoDoJogador, NULL) &&
+           !verificaValor("C", bot->maoDoJogador, NULL) &&
+           !verificaValor("A", bot->maoDoJogador, NULL)){
+    return 1;
+  }
+  return 0;
 }
