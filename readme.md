@@ -3,6 +3,20 @@
 Vídeo de apresentação do projeto:
 https://www.loom.com/share/6dd991e2abef48618560d80ae4c8bfdb
 
+## Como rodar nosso bot
+
+Compilação:
+```
+cd modulo
+make all
+```
+Para rodar o bot_T (nosso executável):
+
+```
+cd ..
+./uno bot_A bot_B modulo/bot_T
+```
+
 ## Introdução
 
 Esta é uma versão do jogo de baralho Uno, com algumas diferenças:
