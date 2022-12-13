@@ -6,7 +6,8 @@
 #include "debug.h"
 #include "definitions.h"
 
-Carta gerarCarta(char *mensagem){     // transforma uma string com valor e nipe em uma variavel do tipo Carta
+/*Transforma uma string com valor e nipe em uma variavel do tipo Carta*/
+Carta gerarCarta(char *mensagem){     
     Carta saida;
     int tamanho = strlen(mensagem);
 
@@ -83,11 +84,13 @@ void inicializaBaralho(Carta totalDeCartas[108]){
       }
 }
 
+/*Desaloca naipe e valor dinamicamente alocados das cartas*/
 void desalocaCarta(Carta *c){
     free((*c).valorCarta);
     free((*c).valorNaipe);
 }
 
+/*Inicializa e retorna uma carta a partir de um valor e naipe dados*/
 Carta inicializaCarta(char *valorCarta, char *valorNaipe){
   char dados[MAX_LINE];  
   Carta c;
@@ -99,6 +102,8 @@ Carta inicializaCarta(char *valorCarta, char *valorNaipe){
   return c;
 }
 
+/*Verifica se determinada carta é do tipo V ou C
+se for, atualiza o valor de especial para 1*/
 void atualizaEspecial(Carta c, int *especial){
   if(strcmp(c.valorCarta, "C") == 0 || strcmp(c.valorCarta, "V") == 0){
     (*especial) = 1;

@@ -20,8 +20,8 @@
 
 int main() {
 
-    Carta totalDeCartas[108];
-    Carta pilhaSobMesa[115];
+    Carta totalDeCartas[108]; //Guarda o baralho total da partida
+    Carta pilhaSobMesa[115]; //Guarda as cartas descartadas durante a partida
     int contador = 0, especial = 0;
 
     char temp[MAX_LINE];  
@@ -31,7 +31,7 @@ int main() {
     Mao minhaMao; //Nossa mão
 
     char complemento2[MAX_LINE];
-    char auxNaipe[MAX_LINE]; 
+    char auxNaipe[MAX_LINE]; //Guarda o naipe atual da partida
     char acao[MAX_ACTION];
     char complemento[MAX_LINE];
 
@@ -42,23 +42,23 @@ int main() {
 
    inicializaBaralho(totalDeCartas);
       
-    // Ler quais são os jogadores
+    //Lê quais são os jogadores
     scanf("PLAYERS %[^\n]\n", temp);
 
-    // Id do nosso bot
+    //Id do nosso bot
     scanf("YOU %s\n", my_id);
     strcpy(botT.id,my_id);
 
-    // A mão recebida
+    //A mão recebida
     scanf("HAND %[^\n]\n", temp);
     botT.maoDoJogador = maoInicial(temp,totalDeCartas); 
     //Manda a string recebida para a função mãoInicial, juntamente com o totalDeCartas para que seja feito o acompanhamento
   
-    // carta inicial 
+    //Carta inicial 
     scanf("TABLE %s\n", temp);
-    pilhaSobMesa[contador++] = gerarCarta(temp); //atualiza pilha
+    pilhaSobMesa[contador++] = gerarCarta(temp); //Atualiza pilha
 
-    strcpy(auxNaipe, pilhaSobMesa[contador-1].valorNaipe); //atualiza auxNaipe
+    strcpy(auxNaipe, pilhaSobMesa[contador-1].valorNaipe); //Atualiza auxNaipe
     auxNaipe[strlen(auxNaipe)] = '\0';
 
     atualizaEspecial(pilhaSobMesa[contador-1], &especial);
@@ -69,11 +69,11 @@ int main() {
 
     do {
 
-        // ler a jogada do bot anterior a vc 
+        //Lê a jogada do bot anterior a vc 
 
         scanf(" %s %s", acao, complemento);
       
-        //aqui é a adição das cartas na pilhaSobMesa
+        //Adiciona cartas na pilhaSobMesa
         if(strcmp(acao, "DISCARD") == 0){
           pilhaSobMesa[contador++] = gerarCarta(complemento);
           strcpy(auxNaipe, pilhaSobMesa[contador-1].valorNaipe);
@@ -88,8 +88,9 @@ int main() {
            auxNaipe[strlen(auxNaipe)] = '\0';
         }
 
+        //Verifica se algum bot respondeu a especial
         if(especial == 1 && strcmp(acao, "BUY")==0 && (strcmp(complemento, "2")==0 || 
-           strcmp(complemento, "4")==0) || strcmp(acao, "INVALID ACTION") == 0){ //verifica se algum bot respondeu a especial
+           strcmp(complemento, "4")==0) || strcmp(acao, "INVALID ACTION") == 0){ 
           especial = 0;
         }
 
@@ -101,20 +102,20 @@ int main() {
     int cartasCompradas = 0;
     Carta recebida;
  
-    recebida = inicializaCarta(pilhaSobMesa[contador-1].valorCarta, pilhaSobMesa[contador-1].valorNaipe); //inicializa carta recebida
+    recebida = inicializaCarta(pilhaSobMesa[contador-1].valorCarta, pilhaSobMesa[contador-1].valorNaipe); //Inicializa carta recebida
 
-    cartasCompradas = compraCartas(recebida, auxNaipe, &especial, &botT); //verifica se o jogador terá que comprar cartas e retorna a qtd
+    cartasCompradas = compraCartas(recebida, auxNaipe, &especial, &botT); //Verifica se o jogador terá que comprar cartas e retorna a qtd
 
-    strcpy(recebida.valorNaipe, auxNaipe); //atualizaNaipe de carta recebida;
+    strcpy(recebida.valorNaipe, auxNaipe); //AtualizaNaipe de carta recebida;
 
     if(!cartasCompradas){
-        int indice = selecionaCarta(recebida, &botT, totalDeCartas);  //recebe carta que vai jogar
+        int indice = selecionaCarta(recebida, &botT, totalDeCartas); //Recebe carta que vai jogar
 
-        pilhaSobMesa[contador++] = acaoDescarta(&botT, indice, auxNaipe); //envia açao ao gerenciador, atualiza naipe e mao do jogador
-        atualizaEspecial(pilhaSobMesa[contador-1], &especial); //atualiza o status de especial quando bot joga
+        pilhaSobMesa[contador++] = acaoDescarta(&botT, indice, auxNaipe); //Envia açao ao gerenciador, atualiza naipe e mao do jogador
+        atualizaEspecial(pilhaSobMesa[contador-1], &especial); //Atualiza o status de especial quando bot joga
     }else{
         retornaFrase();
-        acaoCompra(cartasCompradas, &botT,totalDeCartas); //compra cartas e atualiza mao do jogador
+        acaoCompra(cartasCompradas, &botT,totalDeCartas); //Compra cartas e atualiza mao do jogador
     }
 
   }

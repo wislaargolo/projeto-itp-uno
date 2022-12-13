@@ -7,7 +7,8 @@
 #include "definitions.h"
 #include "carta.h"
 
-Mao maoInicial(char *mensagem, Carta totalDeCartas[108]){     // Faz a leitura das cartas iniciais do bot
+/*Faz a leitura das cartas iniciais do bot*/
+Mao maoInicial(char *mensagem, Carta totalDeCartas[108]){    
     Mao saida;
     Carta aux;
     char *pedaco, vetor[10][10];
@@ -38,8 +39,9 @@ Mao maoInicial(char *mensagem, Carta totalDeCartas[108]){     // Faz a leitura d
     return saida;
 }
 
-void retiraCarta(Jogador *bot, int indice){ //função que retira carta da mão quando essa é jogada (atualiza mão)
-  Carta *aux;
+/*Retira carta da mão do bot quando é descartada*/
+void retiraCarta(Jogador *bot, int indice){ 
+  Carta *aux; 
   int count = 0;
   int qtdCartas = bot->maoDoJogador.qtdDeCartas;
     
@@ -59,6 +61,7 @@ void retiraCarta(Jogador *bot, int indice){ //função que retira carta da mão 
    
 } 
 
+/*Adiciona uma carta por vez a mão do bot*/
 void adicionaCarta(Jogador *bot, Carta c){
   int qtdAtual = bot->maoDoJogador.qtdDeCartas;
   bot->maoDoJogador.cartasDoJogador = realloc(bot->maoDoJogador.cartasDoJogador, sizeof(Carta)*(qtdAtual+1));
