@@ -4,7 +4,7 @@
     Carta cartaInicial;
 */
 
-// Para gerar executavel use o comando -> make all <- 
+// Para gerar executavel use o comando -> make all <- para mais informações ler o readme 
 
 #include <stdio.h>
 #include <string.h>
@@ -20,18 +20,18 @@
 
 int main() {
 
-    Carta totalDeCartas[108];//eram 54 cm 1 baralho só
+    Carta totalDeCartas[108];
     Carta pilhaSobMesa[115];
     int contador = 0, especial = 0;
 
     char temp[MAX_LINE];  
     char my_id[MAX_ID_SIZE]; 
 
-    Jogador botT;
-    Mao minhaMao;
+    Jogador botT; //Nosso jogador (bot)
+    Mao minhaMao; //Nossa mão
 
     char complemento2[MAX_LINE];
-    char auxNaipe[MAX_LINE]; //guarda o naipe atual da partida
+    char auxNaipe[MAX_LINE]; 
     char acao[MAX_ACTION];
     char complemento[MAX_LINE];
 
@@ -52,6 +52,7 @@ int main() {
     // A mão recebida
     scanf("HAND %[^\n]\n", temp);
     botT.maoDoJogador = maoInicial(temp,totalDeCartas); 
+    //Manda a string recebida para a função mãoInicial, juntamente com o totalDeCartas para que seja feito o acompanhamento
   
     // carta inicial 
     scanf("TABLE %s\n", temp);
@@ -78,7 +79,7 @@ int main() {
           strcpy(auxNaipe, pilhaSobMesa[contador-1].valorNaipe);
           //Retira a carta descartada do total de cartas
           acompanhaTotal(totalDeCartas, pilhaSobMesa[contador-1]);
-
+          //Esse if existe para casos de mudança de naipe
           if(strstr(pilhaSobMesa[contador-1].valorCarta,"A")!= NULL || strstr(pilhaSobMesa[contador-1].valorCarta,"C")!= NULL){
             scanf(" %s", complemento2);
             strcpy(auxNaipe, complemento2);

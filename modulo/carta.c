@@ -34,6 +34,7 @@ Carta gerarCarta(char *mensagem){     // transforma uma string com valor e nipe 
     return saida;
 }
 
+/* Essa função acompanha quais cartas da totalidade de cartas dos baralhos ainda não foram jogadas pelos outros jogadores ou compradas pelo nosso bot, utilizada na estrategia */
 void acompanhaTotal(Carta totalDeCartas[108], Carta pedaco){
   int i = 0,j=0;
   for(i=0;i < 108; i++){
@@ -51,6 +52,7 @@ void acompanhaTotal(Carta totalDeCartas[108], Carta pedaco){
   }
 }
 
+/* Essa função preenche o vetor totalDecartas com a totalidade de cartas presentes nos 2 baralhos utilizados */
 void inicializaBaralho(Carta totalDeCartas[108]){
   char* naipes[4] = {"♥", "♦", "♣", "♠"}; 
   char* valor[13] = {"A", "2", "3", "4","5","6","7","8","9","10","V","D","R"}; 

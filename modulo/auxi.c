@@ -63,7 +63,6 @@ void acaoCompra(int qtdCartas, Jogador *bot,Carta totalDeCartas[108]){
   for(int i=0; i<qtdCartas; i++){ //recebe cartas do gerenciador e add na mao
     scanf(" %s\n", cartas[i]);
     c = gerarCarta(cartas[i]);
-    //Acompanha total de cartas
     acompanhaTotal(totalDeCartas, c);
     adicionaCarta(bot, c);
   }
