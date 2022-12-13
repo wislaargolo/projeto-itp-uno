@@ -7,9 +7,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-int verificaNaipe(char *valorNaipe, Mao maoJogador, int *indice){ //verifica se o bot possui alguma carta de determinado naipe e salva indice
+int verificaNaipe(char *valorNaipe, Mao maoJogador, int *indice){ //verificaçao rapida da existencia de um naipe na mao
   for(int i=0; i<maoJogador.qtdDeCartas; i++){
-    if(strcmp(maoJogador.cartasDoJogador[i].valorNaipe, valorNaipe)==0 && strcmp(maoJogador.cartasDoJogador[i].valorCarta, "A")!=0){ //nao verifica As, pra guardar cartas desse tipo
+    if(strcmp(maoJogador.cartasDoJogador[i].valorNaipe, valorNaipe)==0 && strcmp(maoJogador.cartasDoJogador[i].valorCarta, "A")!=0){ //guarda As
       if(indice!=NULL){
         *indice = i;
       }
@@ -19,7 +19,7 @@ int verificaNaipe(char *valorNaipe, Mao maoJogador, int *indice){ //verifica se 
   return 0;
 }
           
-int verificaValor(char *valorCarta, Mao maoJogador, int *indice){ //verifica se o bot possui alguma carta de determinado valor e salva indice
+int verificaValor(char *valorCarta, Mao maoJogador, int *indice){ //verificaçao rapida da existencia de um valor na mao
   for(int i=0; i<maoJogador.qtdDeCartas; i++){
     if(strcmp(maoJogador.cartasDoJogador[i].valorCarta, valorCarta)==0){
       if(indice!=NULL){
@@ -39,7 +39,7 @@ char *naipeFrequente(Jogador *bot){ //escolhe naipe que aparece com maior freque
   maior = maiorIndice = 0;
    
    for(int i=0; i<4; i++){
-      for(int j=0; j<bot->maoDoJogador.qtdDeCartas; j++){ //conta quantas cartas da mao tem determinado naipe
+      for(int j=0; j<bot->maoDoJogador.qtdDeCartas; j++){
         if(strcmp(listaNaipes[i], bot->maoDoJogador.cartasDoJogador[j].valorNaipe)==0){
           qtdNaipe[i] += 1;
         }
@@ -48,7 +48,7 @@ char *naipeFrequente(Jogador *bot){ //escolhe naipe que aparece com maior freque
 
   for(int i=0; i<4; i++){
     if(qtdNaipe[i] > maior){
-      maior = qtdNaipe[i]; //escolhe o naipe que mais aparece
+      maior = qtdNaipe[i];
       maiorIndice = i;
     }
   }
@@ -64,7 +64,7 @@ char *valorFrequente(Jogador *bot){ //escolhe valor que aparece com maior freque
   maior = maiorIndice = 0;
    
    for(int i=0; i<12; i++){
-      for(int j=0; j<bot->maoDoJogador.qtdDeCartas; j++){ //conta quantas cartas da mao tem determinado valor
+      for(int j=0; j<bot->maoDoJogador.qtdDeCartas; j++){
         if(strcmp(listaValor[i], bot->maoDoJogador.cartasDoJogador[j].valorCarta)==0){
           qtdValor[i] += 1;
         }
@@ -73,7 +73,7 @@ char *valorFrequente(Jogador *bot){ //escolhe valor que aparece com maior freque
 
   for(int i=0; i<12; i++){
     if(qtdValor[i] > maior){
-      maior = qtdValor[i]; //escolhe qual valor aparece mais
+      maior = qtdValor[i];
       maiorIndice = i;
     }
   }
@@ -81,14 +81,14 @@ char *valorFrequente(Jogador *bot){ //escolhe valor que aparece com maior freque
   return listaValor[maiorIndice];
 }
 
-char *valorRaro(Carta baralho[108]){ //verifica qual valor é mais raro no baralho total, ie, valor que tem menor chance de estar presente na mao dos outros bots
+char *valorRaro(Carta baralho[108]){ //escolhe valor que foi mais jogado e tem menor chance de estar na mao de algum bot
   char* listaValor[12] = {"2", "3", "4","5","6","7","8","9","10","V","D","R"}; 
   int qtdValor[12] = {0};
   int menor, menorIndice = 0;
    
    for(int i=0; i<12; i++){
       for(int j=0; j<108; j++){
-          if(strcmp(listaValor[i], baralho[j].valorCarta)==0){ //conta quantas cartas de determinado valor existem no baralho restante
+          if(strcmp(listaValor[i], baralho[j].valorCarta)==0){
             qtdValor[i] += 1;
           }
       }
@@ -98,7 +98,7 @@ char *valorRaro(Carta baralho[108]){ //verifica qual valor é mais raro no baral
 
   for(int i=0; i<12; i++){
     if(qtdValor[i] < menor){
-      menor = qtdValor[i]; //escolhe o valor que menos aparece
+      menor = qtdValor[i];
       menorIndice = i;
     }
   }
@@ -106,14 +106,14 @@ char *valorRaro(Carta baralho[108]){ //verifica qual valor é mais raro no baral
   return listaValor[menorIndice];
 }
 
-char *naipeRaro(Carta baralho[108]){ //verifica qual naipe é mais raro no baralho total, ie, naipe que tem menor chance de estar presente na mao dos outros bots
+char *naipeRaro(Carta baralho[108]){ //escolhe naipe que foi mais jogado e tem menor chance de estar na mao de outro bot
   char *listaNaipes[] = {"♥","♦","♣","♠"};
   int qtdNaipe[4] = {0};
   int menor, menorIndice = 0;
    
    for(int i=0; i<4; i++){
       for(int j=0; j<108; j++){
-          if(strcmp(listaNaipes[i], baralho[j].valorNaipe)==0){ //conta quantas cartas de determinado naipe existem no baralho restante
+          if(strcmp(listaNaipes[i], baralho[j].valorNaipe)==0){
             qtdNaipe[i] += 1;
           }
       }
@@ -123,7 +123,7 @@ char *naipeRaro(Carta baralho[108]){ //verifica qual naipe é mais raro no baral
 
   for(int i=0; i<4; i++){
     if(qtdNaipe[i] < menor){
-      menor = qtdNaipe[i]; //escolhe naipe que menos aparece
+      menor = qtdNaipe[i];
       menorIndice = i;
     }
   }
@@ -136,10 +136,10 @@ int frequenciaBaralho(Jogador *bot, Carta baralho[108], Carta c, int* indice){ /
   char valorBaralho[MAX_LINE];
   char naipeBaralho[MAX_LINE];
 
-  strcpy(naipeBaralho, naipeRaro(baralho)); //guarda o naipe menos frequente no baralho restante
+  strcpy(naipeBaralho, naipeRaro(baralho)); //guarda o naipe mais frequente da mao
   naipeBaralho[strlen(naipeBaralho)] = '\0';
 
-  strcpy(valorBaralho, valorRaro(baralho)); //guarda o valor menos frequente no baralho restante
+  strcpy(valorBaralho, valorRaro(baralho)); //guarda o valor mais frequente da mao
   valorBaralho[strlen(valorBaralho)] = '\0';
 
   if(strcmp(c.valorCarta, valorBaralho) == 0 && verificaValor(c.valorCarta, bot->maoDoJogador, indice)){ //verifica valor antes de naipe, pois é mais díficil que os outros bots tenham um determinado valor doq naipe 
@@ -192,24 +192,24 @@ Carta aux;
 int selecionaCarta(Carta c, Jogador *bot, Carta baralho[108]){ //encontra a carta a ser jogada (AINDA VOU MUDAR VARIAS COISAS)
   int indice = 0; //indice da carta que será jogada
 
-  if(verificaValor("C", bot->maoDoJogador, &indice)){ //verifica se possui carta com valor C
+  if(verificaValor("C", bot->maoDoJogador, &indice)){ 
     return indice;
-  }else if(verificaEspecial(c, bot, &indice)){ //verifica se possui especial
+  }else if(verificaEspecial(c, bot, &indice)){
     return indice;
   }else if(frequenciaBaralho(bot, baralho, c, &indice)){ //verifica se é possível jogar o valor/naipe menos frequentes no baralho
     return indice; 
-  }else if(frequenciaMao(bot, c, &indice)){ //verifica se é possível jogar o valor/naipe mais frequente da mao do bot
+  }else if(frequenciaMao(bot, c, &indice)){ //verifica se é possível jogar o  valor/naipe mais frequente da mao do bot
     return indice;
-  }else if(verificaNaipe(c.valorNaipe, bot->maoDoJogador, &indice)){ //verifica se o jogador possui carta com o naipe da mesa
+  }else if(verificaNaipe(c.valorNaipe, bot->maoDoJogador, &indice)){
     return indice;
-  }else if(verificaValor(c.valorCarta, bot->maoDoJogador, &indice)){ //verifica se o jogador possui carta com valor da mesa, pois mais dificil ter valor do que naipe na mao
+  }else if(verificaValor(c.valorCarta, bot->maoDoJogador, &indice)){ //mais dificil ter valor do que naipe na mao
     return indice;
-  }else if(verificaValor("A", bot->maoDoJogador, &indice)){ //verifica se possui As e como é o ultimo if, ele guarda o As
+  }else if(verificaValor("A", bot->maoDoJogador, &indice)){ //guarda o As
     return indice;
   } 
 }
 
-int compraCartas(Carta c, char *naipe, int *especial, Jogador *bot){ //verifica se o bot irá precisar comprar e a quantidade a partir da carta da mesa e valor de especial
+int compraCartas(Carta c, char *naipe, int *especial, Jogador *bot){
   if(strcmp(c.valorCarta, "C")==0 && (*especial) == 1){
     (*especial) = 0;
     return 4;

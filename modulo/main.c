@@ -1,3 +1,8 @@
+/*  Local para colocar as variaveis :)
+    Jogador *jogadores;
+    Mao minhaMao;
+    Carta cartaInicial;
+*/
 
 // Para gerar executavel use o comando -> make all <- 
 
@@ -15,14 +20,14 @@
 
 int main() {
 
-    Carta totalDeCartas[108]; //guarda os dois baralhos utilizados na partida
-    Carta pilhaSobMesa[115]; //guarda as cartas que vão sendo descartadas
+    Carta totalDeCartas[108];//eram 54 cm 1 baralho só
+    Carta pilhaSobMesa[115];
     int contador = 0, especial = 0;
 
     char temp[MAX_LINE];  
     char my_id[MAX_ID_SIZE]; 
 
-    Jogador botT; 
+    Jogador botT;
     Mao minhaMao;
 
     char complemento2[MAX_LINE];
@@ -35,7 +40,7 @@ int main() {
     setbuf(stderr, NULL);
     srand(time(NULL));
 
-   inicializaBaralho(totalDeCartas); //inicializa os dois baralhos com todas as cartas 
+   inicializaBaralho(totalDeCartas);
       
     // Ler quais são os jogadores
     scanf("PLAYERS %[^\n]\n", temp);
@@ -63,14 +68,14 @@ int main() {
 
     do {
 
-        // lê a jogada dos outros bots
+        // ler a jogada do bot anterior a vc 
+
         scanf(" %s %s", acao, complemento);
       
-        //adiciona cartas descartadas na pilhaSobMesa
+        //aqui é a adição das cartas na pilhaSobMesa
         if(strcmp(acao, "DISCARD") == 0){
           pilhaSobMesa[contador++] = gerarCarta(complemento);
           strcpy(auxNaipe, pilhaSobMesa[contador-1].valorNaipe);
-
           //Retira a carta descartada do total de cartas
           acompanhaTotal(totalDeCartas, pilhaSobMesa[contador-1]);
 
@@ -93,7 +98,7 @@ int main() {
     //Vez do bot
     
     int cartasCompradas = 0;
-    Carta recebida; //carta que o bot terá que lidar na sua vez
+    Carta recebida;
  
     recebida = inicializaCarta(pilhaSobMesa[contador-1].valorCarta, pilhaSobMesa[contador-1].valorNaipe); //inicializa carta recebida
 
