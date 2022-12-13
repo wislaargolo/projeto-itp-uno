@@ -8,7 +8,7 @@
 #include <string.h>
 #include <time.h>
 
-void retornaFrase(){
+void retornaFrase(){ //retorna frases 35% das vezes em que é chamada
   const char *listaFrases[] = {"Poxa vida!", 
                                "Que nervoso...",
                                "UNO!! Brincadeira...",
@@ -19,12 +19,12 @@ void retornaFrase(){
   int indice = rand()%6;
   int chance = rand()%100;
 
-  if(chance<=30){
+  if(chance<=35){
     printf("SAY %s\n", listaFrases[indice]);
   }
 }
 
-void recebeCartas(int qtdCartas, Jogador *bot){
+void recebeCartas(int qtdCartas, Jogador *bot){ //recebe as cartas enviadas pelo gerenciador após açao BUY
     char cartas[qtdCartas][MAX_LINE];
     Carta c;
 
@@ -35,12 +35,12 @@ void recebeCartas(int qtdCartas, Jogador *bot){
     }
 }
 
-Carta acaoDescarta(Jogador *bot, int indice, char *auxNaipe){
+Carta acaoDescarta(Jogador *bot, int indice, char *auxNaipe){ //envia a acao DISCARD para o gerenciador e atualiza a mao do bot
   char naipe[MAX_LINE];
   Carta c = bot->maoDoJogador.cartasDoJogador[indice];
   strcpy(auxNaipe, c.valorNaipe);
 
-  if(strcmp(c.valorCarta, "A") == 0 || strcmp(c.valorCarta, "C") == 0){
+  if(strcmp(c.valorCarta, "A") == 0 || strcmp(c.valorCarta, "C") == 0){ //se carta descartada for C ou A, envia outro complemento 
       strcpy(naipe, naipeFrequente(bot));
       naipe[strlen(naipe)] = '\0';
       printf("DISCARD %s%s %s\n", c.valorCarta, c.valorNaipe, naipe);
@@ -54,7 +54,7 @@ Carta acaoDescarta(Jogador *bot, int indice, char *auxNaipe){
     return c;
 }
 
-void acaoCompra(int qtdCartas, Jogador *bot,Carta totalDeCartas[108]){
+void acaoCompra(int qtdCartas, Jogador *bot,Carta totalDeCartas[108]){ //envia acao BUY para o gerenciador e atualiza a mao do jogador com as cartas compradas
   char cartas[qtdCartas][MAX_LINE];
   Carta c;
 
