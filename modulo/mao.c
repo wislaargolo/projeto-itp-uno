@@ -7,7 +7,8 @@
 #include "definitions.h"
 #include "carta.h"
 
-/*Faz a leitura das cartas iniciais do bot*/
+
+/* Faz o tratamento da entrada com o as cartas iniciais do nosso bot e armazena em uma variavel do tipo Mao*/
 Mao maoInicial(char *mensagem, Carta totalDeCartas[108]){    
     Mao saida;
     Carta aux;
