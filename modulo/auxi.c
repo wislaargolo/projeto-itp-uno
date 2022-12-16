@@ -25,18 +25,6 @@ void retornaFrase(){
   }
 }
 
-/*Recebe as cartas enviadas pelo gerenciador após ação BUY*/
-void recebeCartas(int qtdCartas, Jogador *bot){
-    char cartas[qtdCartas][MAX_LINE];
-    Carta c;
-
-    for(int i=0; i<qtdCartas; i++){
-        scanf(" %s\n", cartas[i]);
-        c = gerarCarta(cartas[i]);
-        adicionaCarta(bot, c);
-    }
-}
-
 /*Envia a ação DISCARD para o gerenciador e atualiza a mao do bot*/
 Carta acaoDescarta(Jogador *bot, int indice, char *auxNaipe){
   char naipe[MAX_LINE];
